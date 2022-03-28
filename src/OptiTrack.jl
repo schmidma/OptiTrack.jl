@@ -1,5 +1,12 @@
 module OptiTrack
 
+export
+  OptiTrackConnection,
+  close,
+  isopen,
+  get_rigid_body_with_id,
+  receive
+
 using Sockets: UDPSocket, bind, join_multicast_group, IPv4, recv
 
 mutable struct OptiTrackConnection
@@ -18,7 +25,11 @@ mutable struct OptiTrackConnection
   end
 end
 
-function isopen(connection::OptiTrackConnection)
+function Base.close(connection::OptiTrackConnection)
+  Base.close(connection.socket)
+end
+
+function Base.isopen(connection::OptiTrackConnection)
   Base.isopen(connection.socket)
 end
 
@@ -30,7 +41,7 @@ function get_rigid_body_with_id(id, mocap_frame)
   rigid_bodies[index]
 end
 
-function next(connection::OptiTrackConnection)
+function receive(connection::OptiTrackConnection)
   package = recv(connection.socket)
   parse_package(package)
 end
