@@ -1,0 +1,4 @@
+name = "OptiTrack"
+uuid = "11cff889-9748-4ba6-b915-072355c0b56c"
+authors = ["Maximilian Schmidt <maximilian@schmidt.so>"]
+version = "0.1.0"
