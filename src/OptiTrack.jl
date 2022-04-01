@@ -7,14 +7,16 @@ using Sockets: UDPSocket, bind, join_multicast_group, IPv4, recv
 mutable struct OptiTrackConnection
     socket::UDPSocket
 
-    function OptiTrackConnection(
+    function OptiTrackConnection(;
         multicast_group = "224.0.0.1",
         port = 1511,
         local_interface = IPv4("0.0.0.0"),
     )
         socket = UDPSocket()
-        local_port = 1511
-        bind(socket, local_interface, local_port)
+        successful_bind = bind(socket, local_interface, port; reuseaddr = true)
+        if !successful_bind
+            error("Unable to bind OptiTrack multicast socket")
+        end
         join_multicast_group(socket, multicast_group)
         new(socket)
     end
